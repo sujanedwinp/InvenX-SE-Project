@@ -1,0 +1,22 @@
+{
+  "name": "invenx-backend",
+  "version": "0.1.0",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js",
+    "user:create": "node scripts/createUser.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.6",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^8.21.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
