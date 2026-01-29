@@ -48,6 +48,50 @@ async function login(req, res) {
   });
 }
 
+async function register(req, res) {
+  const { name, dbid, password } = req.body || {};
+
+  if (!name || !password) {
+    return res.status(400).json({ message: "Name and password are required" });
+  }
+
+  // DBID is optional in schema (auto-generated) but required in this specific UI form?
+  // User said "Form with DBID". If provided, we use it. If not, model generates it.
+  // We'll pass it to model.
+
+  try {
+    // Check if dbid already exists if provided
+    if (dbid) {
+      const existingUser = await User.findOne({ dbid });
+      if (existingUser) {
+        return res.status(409).json({ message: "User with this DBID already exists" });
+      }
+    }
+
+    const newUser = await User.create({
+      name,
+      dbid, // can be undefined
+      passwordHash: await bcrypt.hash(password, 10),
+      role: "staff" // Defaulting to staff as per "staff registration" context
+    });
+
+    // We don't log them in automatically according to requirements ("Redirect to /login on success")
+    // But we should return success.
+    return res.status(201).json({
+      message: "User registered successfully",
+      user: {
+        name: newUser.name,
+        dbid: newUser.dbid,
+        role: newUser.role
+      }
+    });
+  } catch (err) {
+    console.error("Register error:", err);
+    return res.status(500).json({ message: "Registration failed" });
+  }
+}
+
+
 async function me(req, res) {
   // req.user.dbid is populated by middleware (requireAuth)
   const user = await User.findOne({ dbid: req.user.dbid, isActive: true }).select(
@@ -61,5 +105,5 @@ async function me(req, res) {
   return res.json({ user });
 }
 
-module.exports = { login, me };
+module.exports = { login, register, me };
 
