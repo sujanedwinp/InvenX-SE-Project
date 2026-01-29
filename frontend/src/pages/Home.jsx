@@ -1,29 +1,84 @@
-import { Link, Navigate } from 'react-router-dom';
-import { isAuthenticated } from '../utils/auth';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Database, ShieldCheck, Zap, ArrowRight, BarChart3 } from 'lucide-react';
 
 const Home = () => {
-    if (isAuthenticated()) {
-        return <Navigate to="/dashboard" />;
-    }
-
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-            <h1 className="text-5xl font-bold text-gray-800 mb-4">InvenX</h1>
-            <p className="text-xl text-gray-600 mb-8">Internal Inventory Management System</p>
-            <div className="space-x-4">
-                <Link
-                    to="/login"
-                    className="px-6 py-3 text-white bg-blue-600 rounded hover:bg-blue-700 transition"
-                >
-                    Login
-                </Link>
-                <Link
-                    to="/register"
-                    className="px-6 py-3 text-white bg-green-600 rounded hover:bg-green-700 transition"
-                >
-                    Register
-                </Link>
+        <div className="min-h-screen flex flex-col bg-white dark:bg-gray-900">
+            {/* Hero Section */}
+            <div className="relative isolate overflow-hidden bg-gradient-to-b from-indigo-100/20 pt-14 dark:from-indigo-900/20">
+                <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
+                    <div
+                        className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
+                        style={{
+                            clipPath:
+                                'polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)',
+                        }}
+                    />
+                </div>
+
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32">
+                    <div className="mx-auto max-w-2xl text-center">
+                        <div className="mb-8 flex justify-center">
+                            <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-300 dark:ring-white/10 dark:hover:ring-white/20">
+                                Announcing InvenX V2.0 <span className="font-semibold text-indigo-600 dark:text-indigo-400"><span className="absolute inset-0" aria-hidden="true" />Read more <span aria-hidden="true">&rarr;</span></span>
+                            </div>
+                        </div>
+                        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-white">
+                            Inventory management for the modern era
+                        </h1>
+                        <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
+                            Streamline your stock tracking, visualize data with powerful charts, and manage your inventory with a professional, secure dashboard.
+                        </p>
+                        <div className="mt-10 flex items-center justify-center gap-x-6">
+                            <Link
+                                to="/login"
+                                className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all"
+                            >
+                                Get started
+                            </Link>
+                            <Link
+                                to="/register"
+                                className="text-sm font-semibold leading-6 text-gray-900 dark:text-white flex items-center gap-1"
+                            >
+                                Create account <ArrowRight size={16} />
+                            </Link>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            {/* Feature Section */}
+            <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16">
+                <div className="grid grid-cols-1 gap-y-16 gap-x-8 lg:grid-cols-3">
+                    <div className="flex flex-col items-center text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl mb-4 text-blue-600 dark:text-blue-400">
+                            <Zap size={32} />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Real-time Tracking</h3>
+                        <p className="text-gray-500 dark:text-gray-400">Monitor your stock levels instantly with our high-performance dashboard.</p>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl mb-4 text-purple-600 dark:text-purple-400">
+                            <ShieldCheck size={32} />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Secure & Reliable</h3>
+                        <p className="text-gray-500 dark:text-gray-400">Built with robust authentication and database security protocols.</p>
+                    </div>
+                    <div className="flex flex-col items-center text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
+                        <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-xl mb-4 text-green-600 dark:text-green-400">
+                            <BarChart3 size={32} />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Data Insights</h3>
+                        <p className="text-gray-500 dark:text-gray-400">Visualize your inventory distribution with beautiful, interactive charts.</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* Footer */}
+            <footer className="mt-auto py-8 text-center text-gray-500 text-sm border-t border-gray-200 dark:border-gray-800">
+                <p>&copy; {new Date().getFullYear()} InvenX System. All rights reserved.</p>
+            </footer>
         </div>
     );
 };

@@ -1,77 +1,105 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { setToken } from '../utils/auth';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { loginUser } from '../utils/auth';
+import AuthLayout from '../components/AuthLayout';
+import { LogIn, AlertCircle } from 'lucide-react';
 
 const Login = () => {
-    const [dbid, setDbid] = useState('');
-    const [password, setPassword] = useState('');
+    const [formData, setFormData] = useState({
+        dbId: '',
+        password: ''
+    });
     const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value
+        });
+        setError(''); // Clear error on change
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         setError('');
 
         try {
-            const response = await fetch('http://localhost:5000/api/auth/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ dbid, password }),
-            });
-
-            const data = await response.json();
-
-            if (!response.ok) {
-                throw new Error(data.message || 'Login failed');
+            const result = await loginUser(formData);
+            if (result.success) {
+                navigate('/dashboard');
+            } else {
+                setError(result.error);
             }
-
-            setToken(data.token);
-            navigate('/dashboard');
         } catch (err) {
-            setError(err.message);
+            console.error(err);
+            setError('An unexpected error occurred. Please try again.');
+        } finally {
+            setLoading(false);
         }
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-100">
-            <div className="w-full max-w-md p-8 space-y-6 bg-white rounded shadow-md">
-                <h2 className="text-2xl font-bold text-center">Login to InvenX</h2>
-                {error && <p className="text-red-500 text-center">{error}</p>}
-                <form onSubmit={handleSubmit} className="space-y-4">
-                    <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">DBID</label>
+        <AuthLayout
+            title="Welcome back"
+            subtitle={<span>Or <Link to="/register" className="font-medium text-indigo-600 hover:text-indigo-500">create a new account</Link></span>}
+        >
+            <form className="space-y-6" onSubmit={handleSubmit}>
+                {error && (
+                    <div className="flex items-center gap-2 p-4 text-sm text-red-700 bg-red-50 rounded-lg dark:bg-red-900/30 dark:text-red-400" role="alert">
+                        <AlertCircle size={18} />
+                        <span>{error}</span>
+                    </div>
+                )}
+
+                <div>
+                    <label htmlFor="dbId" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">
+                        Database ID
+                    </label>
+                    <div className="mt-2">
                         <input
+                            id="dbId"
+                            name="dbId"
                             type="text"
-                            value={dbid}
-                            onChange={(e) => setDbid(e.target.value)}
-                            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
+                            value={formData.dbId}
+                            onChange={handleChange}
+                            className="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:ring-gray-600 dark:text-white"
+                            placeholder="Enter your DB ID"
                         />
                     </div>
-                    <div>
-                        <label className="block mb-1 text-sm font-medium text-gray-700">Password</label>
+                </div>
+
+                <div>
+                    <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">
+                        Password
+                    </label>
+                    <div className="mt-2">
                         <input
+                            id="password"
+                            name="password"
                             type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
                             required
+                            value={formData.password}
+                            onChange={handleChange}
+                            className="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:ring-gray-600 dark:text-white"
                         />
                     </div>
+                </div>
+
+                <div>
                     <button
                         type="submit"
-                        className="w-full py-2 text-white bg-blue-600 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        disabled={loading}
+                        className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 disabled:opacity-70 disabled:cursor-not-allowed transition-all"
                     >
-                        Login
+                        {loading ? 'Signing in...' : 'Sign in'}
                     </button>
-                </form>
-                <div className="text-center">
-                    <a href="/" className="text-sm text-blue-600 hover:underline">Back to Home</a>
                 </div>
-            </div>
-        </div>
+            </form>
+        </AuthLayout>
     );
 };
 
