@@ -12,7 +12,8 @@ const AddInventory = () => {
         quantity: '',
         price: '',
         category: '',
-        // alerts and alertStatus logic can be added if backend supports it, keeping simple for now based on prompt
+        minQty: 0,
+        maxPrice: 0
     });
 
     const handleChange = (e) => {
@@ -23,19 +24,29 @@ const AddInventory = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            // Check if service function exists, otherwise default to fetch
-            // Using raw fetch if service doesn't have create
-            const token = localStorage.getItem('token'); // Simplification
+            const token = localStorage.getItem('invenx_token');
             if (!token) throw new Error("No token");
 
-            // Assuming standard API endpoint
+            // Construct payload matching backend expectation (see inventoryService.js)
+            const payload = {
+                name: formData.name,
+                quantity: Number(formData.quantity),
+                price: Number(formData.price),
+                alerts: {
+                    minQty: Number(formData.minQty),
+                    maxPrice: Number(formData.maxPrice),
+                    enabled: true // Enable alerts by default if values are set
+                }
+                // Note: 'category' is NOT sent because backend schema does not support it
+            };
+
             const response = await fetch('http://localhost:5000/api/inventory', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(payload)
             });
 
             if (response.ok) {
@@ -45,7 +56,6 @@ const AddInventory = () => {
             }
 
         } catch (err) {
-            console.error(err);
             console.error(err);
             alert("Error creating item");
         } finally {
@@ -61,7 +71,7 @@ const AddInventory = () => {
                 </Link>
                 <div>
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Add New Item</h1>
-                    <p className="text-sm text-gray-500">Enter the details of the new inventory item.</p>
+                    <p className="text-sm text-gray-500">Enter the details and alert thresholds for the new item.</p>
                 </div>
             </div>
 
@@ -108,19 +118,60 @@ const AddInventory = () => {
                             />
                         </div>
 
+                        {/* New Alert Fields */}
+                        <div className="sm:col-span-2 border-t border-gray-100 dark:border-gray-700 pt-4 mt-2">
+                            <h3 className="text-sm font-medium text-gray-900 dark:text-white mb-4">Inventory Alerts</h3>
+                            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Min Quantity (Low Stock)</label>
+                                    <div className="mt-1 relative rounded-md shadow-sm">
+                                        <input
+                                            type="number"
+                                            name="minQty"
+                                            min="0"
+                                            value={formData.minQty}
+                                            onChange={handleChange}
+                                            className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm py-2 px-3 border"
+                                        />
+                                        <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                                            <span className="text-gray-500 sm:text-sm">units</span>
+                                        </div>
+                                    </div>
+                                    <p className="mt-1 text-xs text-gray-500">Alert when stock falls below this.</p>
+                                </div>
+
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Max Price (Cost Alert)</label>
+                                    <div className="mt-1 relative rounded-md shadow-sm">
+                                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                            <span className="text-gray-500 sm:text-sm">$</span>
+                                        </div>
+                                        <input
+                                            type="number"
+                                            name="maxPrice"
+                                            min="0"
+                                            step="0.01"
+                                            value={formData.maxPrice}
+                                            onChange={handleChange}
+                                            className="block w-full pl-7 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm py-2 px-3 border"
+                                        />
+                                    </div>
+                                    <p className="mt-1 text-xs text-gray-500">Alert when price exceeds this.</p>
+                                </div>
+                            </div>
+                        </div>
+
                         <div className="sm:col-span-2">
-                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+                            {/* Category kept for display but seemingly unsupported by backend */}
+                            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">Category (Unsupported by DB)</label>
                             <select
                                 name="category"
                                 value={formData.category}
                                 onChange={handleChange}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm py-2 px-3 border"
+                                disabled
+                                className="mt-1 block w-full rounded-md border-gray-300 bg-gray-50 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 sm:text-sm py-2 px-3 border cursor-not-allowed"
                             >
-                                <option value="">Select a category</option>
-                                <option value="Electronics">Electronics</option>
-                                <option value="Furniture">Furniture</option>
-                                <option value="Office Supplies">Office Supplies</option>
-                                <option value="Other">Other</option>
+                                <option value="">Category saving not enabled in database</option>
                             </select>
                         </div>
                     </div>
