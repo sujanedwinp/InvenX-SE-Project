@@ -1,4 +1,5 @@
-const API_BASE = "http://localhost:5000";
+import API_URL from "../api";
+const API_BASE = API_URL;
 
 export function getToken() {
   return localStorage.getItem("invenx_token");
