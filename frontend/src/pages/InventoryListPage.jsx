@@ -69,7 +69,7 @@ export default function InventoryListPage({ onCreateNew, onOpenItem }) {
               {item.name}
             </button>
             <div>{item.quantity}</div>
-            <div>${Number(item.price).toFixed(2)}</div>
+            <div>Rs.{Number(item.price).toFixed(2)}</div>
             <div>
               {item.alerts?.enabled
                 ? item.alertStatus?.isAlert

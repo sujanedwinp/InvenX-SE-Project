@@ -30,6 +30,20 @@ async function createItem({ dbid, body }) {
   if (Number.isNaN(payload.quantity) || payload.quantity < 0) throw new Error("quantity must be non-negative");
   if (Number.isNaN(payload.price) || payload.price < 0) throw new Error("price must be non-negative");
 
+  // Stack quantity if an item with the same name already exists for this user
+  const existing = await InventoryItem.findOne({
+    name: { $regex: new RegExp(`^${payload.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
+    createdBy: dbid
+  });
+
+  if (existing) {
+    existing.quantity += payload.quantity;
+    existing.price = payload.price;
+    if (payload.alerts) existing.alerts = payload.alerts;
+    const saved = await existing.save();
+    return { item: saved.toObject(), alertStatus: evaluateItemAlerts(saved) };
+  }
+
   const item = await InventoryItem.create({
     ...payload,
     createdBy: dbid

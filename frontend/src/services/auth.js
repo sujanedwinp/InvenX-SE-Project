@@ -7,7 +7,9 @@ export async function loginWithDbid({ dbid, password }) {
   });
 
   setToken(data.token);
-  localStorage.setItem("invenx_user", JSON.stringify(data.user));
+  // Persist loginMethod alongside user so AuthContext can read it on page reload
+  const userToStore = { ...data.user, loginMethod: data.user?.loginMethod || "dbid" };
+  localStorage.setItem("invenx_user", JSON.stringify(userToStore));
 
   return data;
 }

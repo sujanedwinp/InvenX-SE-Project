@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X, Database, LogOut, Package, LayoutDashboard, Home as HomeIcon } from 'lucide-react';
-import { logout } from '../utils/auth';
+import { Menu, X, Database, LogOut, Package, LayoutDashboard, Home as HomeIcon, UserCircle } from 'lucide-react';
+import { logout } from '../services/auth';
 
 const Navbar = () => {
-    // const { user, logout } = useAuth(); // Removed crash causing hook
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-    // Placeholder data - in a real app, this might come from user context or backend
-    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
-    const dbName = storedUser.dbId || storedUser.dbid || "GAWKGAWK_DB";
+    // Read from the correct key that AuthContext writes to
+    const storedUser = JSON.parse(localStorage.getItem('invenx_user') || '{}');
+    const dbName = (storedUser.dbid || storedUser.dbId || 'DATABASE').toUpperCase();
 
     const handleLogout = () => {
-        logout();
+        logout(); // clears invenx_token + invenx_user
         navigate('/login');
     };
 
@@ -21,6 +20,7 @@ const Navbar = () => {
         { name: 'Home', path: '/', icon: <HomeIcon size={18} /> },
         { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { name: 'Inventory', path: '/inventory', icon: <Package size={18} /> },
+        { name: 'Profile', path: '/profile', icon: <UserCircle size={18} /> },
     ];
 
     return (

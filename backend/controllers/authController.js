@@ -3,10 +3,11 @@ const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
 
-function signToken(user) {
+function signToken(user, loginMethod = "dbid") {
   // DBID is the login identifier, so it is the primary identity in the JWT.
+  // loginMethod is included so /api/user/password can gate access.
   return jwt.sign(
-    { dbid: user.dbid, role: user.role },
+    { dbid: user.dbid, role: user.role, loginMethod },
     process.env.JWT_SECRET,
     { expiresIn: "12h" }
   );
@@ -34,16 +35,18 @@ async function login(req, res) {
     return res.status(401).json({ message: "Invalid credentials" });
   }
 
-  const token = signToken(user);
+  const token = signToken(user, "dbid");
 
-  // Return user colors here so Module 4 can apply theme immediately after login.
+  // Return user colors so ThemeContext applies the theme immediately after login.
+  // loginMethod is returned so the Profile page can conditionally show password change.
   return res.json({
     token,
     user: {
       name: user.name,
       dbid: user.dbid,
       role: user.role,
-      colors: user.colors
+      colors: user.colors,
+      loginMethod: "dbid"
     }
   });
 }
@@ -93,7 +96,7 @@ async function register(req, res) {
 
 
 async function me(req, res) {
-  // req.user.dbid is populated by middleware (requireAuth)
+  // req.user.dbid is populated by requireAuth middleware (from JWT)
   const user = await User.findOne({ dbid: req.user.dbid, isActive: true }).select(
     "name dbid role colors isActive createdAt"
   );
@@ -102,7 +105,23 @@ async function me(req, res) {
     return res.status(404).json({ message: "User not found" });
   }
 
-  return res.json({ user });
+  // Return a plain object — never send a Mongoose document directly.
+  // Expanding colors as a plain object prevents subdocument serialization issues.
+  return res.json({
+    user: {
+      name: user.name,
+      dbid: user.dbid,
+      role: user.role,
+      createdAt: user.createdAt,
+      loginMethod: req.user.loginMethod || "dbid",
+      colors: {
+        bg: user.colors.bg,
+        chart: user.colors.chart,
+        border: user.colors.border,
+        font: user.colors.font
+      }
+    }
+  });
 }
 
 module.exports = { login, register, me };

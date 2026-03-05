@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { loginUser } from '../utils/auth';
+import { useAuth } from '../context/AuthContext';
 import AuthLayout from '../components/AuthLayout';
 import { LogIn, AlertCircle } from 'lucide-react';
 
 const Login = () => {
+    const { login } = useAuth();
     const [formData, setFormData] = useState({
         dbId: '',
         password: ''
@@ -27,15 +28,13 @@ const Login = () => {
         setError('');
 
         try {
-            const result = await loginUser(formData);
-            if (result.success) {
-                navigate('/dashboard');
-            } else {
-                setError(result.error);
-            }
+            // Use AuthContext.login() so user state (name, role, colors, loginMethod)
+            // is immediately available to all components including Profile.
+            await login({ dbid: formData.dbId || formData.dbid, password: formData.password });
+            navigate('/dashboard');
         } catch (err) {
             console.error(err);
-            setError('An unexpected error occurred. Please try again.');
+            setError(err.message || 'Invalid credentials. Please try again.');
         } finally {
             setLoading(false);
         }

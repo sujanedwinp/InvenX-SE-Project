@@ -16,7 +16,9 @@ function requireAuth(req, res, next) {
     // - Attached to req.user for downstream controllers/services
     req.user = {
       dbid: payload.dbid,
-      role: payload.role
+      role: payload.role,
+      // loginMethod comes from the JWT — used by /api/user/password to gate access
+      loginMethod: payload.loginMethod || "dbid"
     };
 
     return next();

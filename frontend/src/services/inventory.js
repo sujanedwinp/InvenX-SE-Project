@@ -31,7 +31,6 @@ export async function deleteInventoryItem(id) {
   });
 }
 
-// Module 6: Quick inline updates (atomic ops)
 export async function incInventoryQty(id, delta) {
   return apiFetch(`/api/inventory/${id}/quantity`, {
     token: getToken(),
@@ -46,5 +45,9 @@ export async function setInventoryPrice(id, price) {
     method: "PATCH",
     body: JSON.stringify({ price })
   });
+}
+
+export async function fetchDashboardStats() {
+  return apiFetch("/api/dashboard/stats", { token: getToken() });
 }
 
