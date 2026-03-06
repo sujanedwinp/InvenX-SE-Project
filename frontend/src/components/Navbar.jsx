@@ -17,8 +17,7 @@ const Navbar = () => {
     };
 
     const navLinks = [
-        { name: 'Home', path: '/', icon: <HomeIcon size={18} /> },
-        { name: 'Dashboard', path: '/dashboard', icon: <LayoutDashboard size={18} /> },
+        { name: 'Home', path: '/dashboard', icon: <LayoutDashboard size={18} /> },
         { name: 'Inventory', path: '/inventory', icon: <Package size={18} /> },
         { name: 'Profile', path: '/profile', icon: <UserCircle size={18} /> },
     ];

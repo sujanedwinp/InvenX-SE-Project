@@ -7,7 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 function getStatus(item) {
     const enabled = item.alerts?.enabled === true;
     const low = enabled && item.quantity < (item.alerts?.minQty ?? 0);
-    const price = enabled && item.price > (item.alerts?.maxPrice ?? Infinity);
+    const price = enabled && (item.alerts?.maxPrice ?? 0) > 0 && item.price > item.alerts.maxPrice;
     if (low && price) return 'LOW_PRICE';
     if (low) return 'LOW';
     if (price) return 'PRICE';
@@ -91,15 +91,15 @@ const Inventory = () => {
                 {/* Search Bar */}
                 <div className="relative w-full max-w-md">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Search size={18} className="text-gray-400" />
+                        <Search size={18} className="text-gray-400" />
                     </div>
 
                     <input
-                    type="text"
-                    value={q}
-                    onChange={(e) => setQ(e.target.value)}
-                    placeholder="Search items..."
-                    className="block w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                        type="text"
+                        value={q}
+                        onChange={(e) => setQ(e.target.value)}
+                        placeholder="Search items..."
+                        className="block w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                     />
                 </div>
 
@@ -168,7 +168,7 @@ const Inventory = () => {
                                             Rs. {Number(item.price).toFixed(2)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
-                                            Rs. {item.quantity * Number(item.price).toFixed(2)}
+                                            Rs. {(item.quantity * item.price).toFixed(2)}
                                         </td>
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <div className="flex items-center justify-end gap-3">

@@ -23,20 +23,20 @@ const Home = () => {
                             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-300 dark:ring-white/10 dark:hover:ring-white/20">
                                 InvenX{" "}
                                 <a
-                                href="https://github.com/sujanedwinp/InvenX-SE-Project"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="font-semibold text-indigo-600 dark:text-indigo-400"
+                                    href="https://github.com/sujanedwinp/InvenX-SE-Project"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="font-semibold text-indigo-600 dark:text-indigo-400"
                                 >
-                                GitHub
+                                    GitHub
                                 </a>
                             </div>
-                            </div>
+                        </div>
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-white">
                             Inventory management for the modern era
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                            Steamlining inventory managment through stock tracking and visual charts.
+                            Streamlining inventory management through stock tracking and visual charts.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
                             <Link

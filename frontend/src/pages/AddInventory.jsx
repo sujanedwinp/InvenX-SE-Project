@@ -47,7 +47,7 @@ const AddInventory = () => {
                 alerts: {
                     minQty: Number(formData.minQty),
                     maxPrice: Number(formData.maxPrice),
-                    enabled: true
+                    enabled: Number(formData.minQty) > 0 || Number(formData.maxPrice) > 0
                 }
             };
 

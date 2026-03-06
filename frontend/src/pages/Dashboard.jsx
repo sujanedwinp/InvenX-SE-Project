@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo, memo } from 'react';
 import { fetchDashboardStats } from '../services/inventory';
 import { useAuth } from '../context/AuthContext';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
-import { Package, AlertTriangle, Layers, UserCircle } from 'lucide-react';
+import { Package, AlertTriangle, Layers } from 'lucide-react';
 import StatCard from '../components/StatCard';
 
 // Fixed colour palette — enough for top-10 slices + "Other Items"
@@ -12,7 +12,9 @@ const COLORS = [
     '#84cc16', '#f97316', '#a78bfa'
 ];
 
-const CustomTooltip = ({ active, payload }) => {
+// Wrapped in memo — gives Recharts a stable reference and prevents Pie re-renders
+// triggered by parent state changes unrelated to chart data.
+const CustomTooltip = memo(({ active, payload }) => {
     if (!active || !payload?.length) return null;
     const { name, value } = payload[0].payload;
     return (
@@ -21,7 +23,7 @@ const CustomTooltip = ({ active, payload }) => {
             <p className="text-gray-400">Stock: <strong className="text-white">{value}</strong></p>
         </div>
     );
-};
+});
 
 const Dashboard = () => {
     const { user } = useAuth();
@@ -43,7 +45,8 @@ const Dashboard = () => {
         })();
     }, []);
 
-    const chartData = stats?.chartData ?? [];
+    // Memoised — only recalculated when stats reference changes, not on every render
+    const chartData = useMemo(() => stats?.chartData ?? [], [stats]);
     const roleName = user?.role
         ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
         : 'User';
@@ -76,7 +79,7 @@ const Dashboard = () => {
                     value={stats?.lowStock ?? 0}
                     icon={AlertTriangle}
                     color={(stats?.lowStock ?? 0) > 0 ? 'red' : 'green'}
-                    trend={(stats?.lowStock ?? 0) > 0 ? 'up' : 'down'}
+                    trend={(stats?.lowStock ?? 0) > 0 ? 'down' : 'up'}
                     trendValue={stats?.lowStock ?? 0}
                 />
             </div>
@@ -108,6 +111,7 @@ const Dashboard = () => {
                                     innerRadius={50}
                                     paddingAngle={2}
                                     stroke="none"
+                                    isAnimationActive={false}
                                 >
                                     {chartData.map((_, idx) => (
                                         <Cell
