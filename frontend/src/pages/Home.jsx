@@ -21,14 +21,22 @@ const Home = () => {
                     <div className="mx-auto max-w-2xl text-center">
                         <div className="mb-8 flex justify-center">
                             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-300 dark:ring-white/10 dark:hover:ring-white/20">
-                                Announcing InvenX V2.0 <span className="font-semibold text-indigo-600 dark:text-indigo-400"><span className="absolute inset-0" aria-hidden="true" />Read more <span aria-hidden="true">&rarr;</span></span>
+                                InvenX{" "}
+                                <a
+                                href="https://github.com/sujanedwinp/InvenX-SE-Project"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="font-semibold text-indigo-600 dark:text-indigo-400"
+                                >
+                                GitHub
+                                </a>
                             </div>
-                        </div>
+                            </div>
                         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl dark:text-white">
                             Inventory management for the modern era
                         </h1>
                         <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                            Streamline your stock tracking, visualize data with powerful charts, and manage your inventory with a professional, secure dashboard.
+                            Steamlining inventory managment through stock tracking and visual charts.
                         </p>
                         <div className="mt-10 flex items-center justify-center gap-x-6">
                             <Link
@@ -56,21 +64,21 @@ const Home = () => {
                             <Zap size={32} />
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Real-time Tracking</h3>
-                        <p className="text-gray-500 dark:text-gray-400">Monitor your stock levels instantly with our high-performance dashboard.</p>
+                        <p className="text-gray-500 dark:text-gray-400">Stock tracking with Dashboard.</p>
                     </div>
                     <div className="flex flex-col items-center text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
                         <div className="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-xl mb-4 text-purple-600 dark:text-purple-400">
                             <ShieldCheck size={32} />
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Secure & Reliable</h3>
-                        <p className="text-gray-500 dark:text-gray-400">Built with robust authentication and database security protocols.</p>
+                        <p className="text-gray-500 dark:text-gray-400">Login with password to access your Inventory.</p>
                     </div>
                     <div className="flex flex-col items-center text-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700">
                         <div className="p-3 bg-green-50 dark:bg-green-900/20 rounded-xl mb-4 text-green-600 dark:text-green-400">
                             <BarChart3 size={32} />
                         </div>
                         <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">Data Insights</h3>
-                        <p className="text-gray-500 dark:text-gray-400">Visualize your inventory distribution with beautiful, interactive charts.</p>
+                        <p className="text-gray-500 dark:text-gray-400">Visual Charts to easily understand inventory levels</p>
                     </div>
                 </div>
             </div>
@@ -78,6 +86,7 @@ const Home = () => {
             {/* Footer */}
             <footer className="mt-auto py-8 text-center text-gray-500 text-sm border-t border-gray-200 dark:border-gray-800">
                 <p>&copy; {new Date().getFullYear()} InvenX System. All rights reserved.</p>
+                <p>A Software Engineering Project.</p>
             </footer>
         </div>
     );

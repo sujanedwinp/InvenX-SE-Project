@@ -65,10 +65,7 @@ const Dashboard = () => {
     return (
         <div className="space-y-8">
             {/* Header */}
-            <div>
-                <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Dashboard</h1>
-                <p className="text-gray-500 dark:text-gray-400">Welcome back, {user?.name}</p>
-            </div>
+            {/*Updateable Later*/}
 
             {/* Stat cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -139,11 +136,8 @@ const Dashboard = () => {
                 {/* ── Profile Panel ─────────────────────────────────────────── */}
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="bg-indigo-100 dark:bg-indigo-900/30 p-3 rounded-full">
-                            <UserCircle size={32} className="text-indigo-600 dark:text-indigo-400" />
-                        </div>
                         <div>
-                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">{user?.name}</h2>
+                            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Welcome back, {user?.name}</h2>
                             <span className="inline-block mt-0.5 px-2 py-0.5 rounded-full text-xs font-semibold bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
                                 {roleName}
                             </span>
