@@ -111,7 +111,12 @@ const Dashboard = () => {
                                     innerRadius={50}
                                     paddingAngle={2}
                                     stroke="none"
-                                    isAnimationActive={false}
+                                    startAngle={90}
+                                    endAngle={450}
+                                    isAnimationActive={true}
+                                    animationBegin={0}
+                                    animationDuration={200}
+                                    animationEasing="ease-out"
                                 >
                                     {chartData.map((_, idx) => (
                                         <Cell
