@@ -7,7 +7,7 @@ import { LogIn, AlertCircle } from 'lucide-react';
 const Login = () => {
     const { login } = useAuth();
     const [formData, setFormData] = useState({
-        dbId: '',
+        dbid: '',
         password: ''
     });
     const [error, setError] = useState('');
@@ -19,7 +19,7 @@ const Login = () => {
             ...formData,
             [e.target.name]: e.target.value
         });
-        setError(''); // Clear error on change
+        setError('');
     };
 
     const handleSubmit = async (e) => {
@@ -28,9 +28,7 @@ const Login = () => {
         setError('');
 
         try {
-            // Use AuthContext.login() so user state (name, role, colors, loginMethod)
-            // is immediately available to all components including Profile.
-            await login({ dbid: formData.dbId || formData.dbid, password: formData.password });
+            await login({ dbid: formData.dbid, password: formData.password });
             navigate('/dashboard');
         } catch (err) {
             console.error(err);
@@ -39,6 +37,7 @@ const Login = () => {
             setLoading(false);
         }
     };
+
 
     return (
         <AuthLayout
@@ -55,18 +54,18 @@ const Login = () => {
 
                 <div>
                     <label htmlFor="dbId" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">
-                        Database ID
+                        DB Name
                     </label>
                     <div className="mt-2">
                         <input
                             id="dbId"
-                            name="dbId"
+                            name="dbid"
                             type="text"
                             required
-                            value={formData.dbId}
+                            value={formData.dbid}
                             onChange={handleChange}
                             className="block w-full rounded-md border-0 py-2.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-700 dark:ring-gray-600 dark:text-white"
-                            placeholder="Enter your DB ID"
+                            placeholder="Enter your DB Name"
                         />
                     </div>
                 </div>

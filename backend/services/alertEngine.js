@@ -1,7 +1,3 @@
-// Module 7: Centralized Alert Evaluation Engine
-// - Runs after ANY inventory update (create/full edit/quick update)
-// - UI-independent (backend-only)
-// - Returns a normalized alertStatus for the frontend
 
 function evaluateItemAlerts(item) {
   const enabled = Boolean(item.alerts?.enabled);
@@ -11,7 +7,6 @@ function evaluateItemAlerts(item) {
   const triggers = [];
 
   if (enabled) {
-    // Quantity threshold
     if (Number.isFinite(minQty) && minQty > 0 && item.quantity <= minQty) {
       triggers.push({
         type: "LOW_QTY",
@@ -21,7 +16,6 @@ function evaluateItemAlerts(item) {
       });
     }
 
-    // Price threshold
     if (Number.isFinite(maxPrice) && maxPrice > 0 && item.price >= maxPrice) {
       triggers.push({
         type: "HIGH_PRICE",

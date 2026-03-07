@@ -3,7 +3,6 @@ import { listInventory, deleteInventoryItem } from '../services/inventory';
 import { Search, Plus, Trash2, Edit, AlertCircle, PackageX, Package } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 
-// ── Status helpers ────────────────────────────────────────────────────────────
 function getStatus(item) {
     const enabled = item.alerts?.enabled === true;
     const low = enabled && item.quantity < (item.alerts?.minQty ?? 0);
@@ -30,7 +29,6 @@ const StatusBadge = ({ item }) => {
         </span>
     );
 };
-// ─────────────────────────────────────────────────────────────────────────────
 
 const Inventory = () => {
     const [items, setItems] = useState([]);
@@ -88,7 +86,6 @@ const Inventory = () => {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center gap-4">
-                {/* Search Bar */}
                 <div className="relative w-full max-w-md">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <Search size={18} className="text-gray-400" />
@@ -103,7 +100,6 @@ const Inventory = () => {
                     />
                 </div>
 
-                {/* Add Item Button */}
                 <Link
                     to="/add-inventory"
                     className="inline-flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-500 transition-colors shadow-sm font-medium text-sm"
@@ -114,7 +110,6 @@ const Inventory = () => {
 
             </div>
 
-            {/* Table */}
             <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">

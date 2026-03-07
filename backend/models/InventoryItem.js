@@ -11,10 +11,6 @@ const inventoryItemSchema = new mongoose.Schema(
       maxPrice: { type: Number, default: 0, min: 0 },
       enabled: { type: Boolean, default: false }
     },
-
-    // WHERE DBID IS REFERENCED IN INVENTORY:
-    // - createdBy stores the *User.dbid* (NOT email; NOT ObjectId).
-    // - It is assigned from req.user.dbid in Module 5/6 after JWT auth (Module 3).
     createdBy: { type: String, required: true, index: true }
   },
   {
@@ -22,7 +18,6 @@ const inventoryItemSchema = new mongoose.Schema(
   }
 );
 
-// Optional helper relation: populate creator by matching Inventory.createdBy -> User.dbid
 inventoryItemSchema.virtual("createdByUser", {
   ref: "User",
   localField: "createdBy",

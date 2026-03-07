@@ -5,8 +5,6 @@ const userSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, trim: true },
 
-    // DBID is the primary human-typed login identifier (Module 3).
-    // Stored as 8-char alphanumeric, unique across users.
     dbid: { type: String, required: true, unique: true, index: true },
 
     passwordHash: { type: String, required: true, select: false },
@@ -16,16 +14,6 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "staff", "user"],
       default: "user",
       required: true
-    },
-
-    // Admin-only internal email (NOT used for login; NOT exposed in UI).
-    adminEmail: {
-      type: String,
-      trim: true,
-      lowercase: true,
-      unique: true,
-      sparse: true,
-      select: false
     },
 
     colors: {
@@ -42,17 +30,14 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// WHERE DBID IS GENERATED:
-// - On first validation for new users, if dbid is missing, we generate it.
-// - We also ensure uniqueness by checking the DB before assigning.
+
 userSchema.pre("validate", async function generateUniqueDbid(next) {
   try {
     if (!this.isNew || this.dbid) return next();
 
-    // Retry loop in case of rare collisions
+    // Loop to avoid collision
     for (let attempt = 0; attempt < 5; attempt += 1) {
       const candidate = generateDbid();
-      // eslint-disable-next-line no-await-in-loop
       const exists = await this.constructor.exists({ dbid: candidate });
       if (!exists) {
         this.dbid = candidate;
@@ -60,7 +45,7 @@ userSchema.pre("validate", async function generateUniqueDbid(next) {
       }
     }
 
-    return next(new Error("Failed to generate unique DBID"));
+    return next(new Error("Failed to generate unique DBID."));
   } catch (err) {
     return next(err);
   }

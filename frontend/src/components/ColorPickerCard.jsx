@@ -4,24 +4,17 @@ import { useTheme, DEFAULT_THEME } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 import { updateColors } from '../services/user';
 
-// Labels and keys for the four theme color slots
 const COLOR_SLOTS = [
-    { key: 'bg', label: 'c1 – Background', desc: 'Page / card background' },
-    { key: 'chart', label: 'c2 – Highlight', desc: 'Charts & accent elements' },
-    { key: 'border', label: 'c3 – Border', desc: 'Card borders & dividers' },
-    { key: 'font', label: 'c4 – Text', desc: 'Primary text color' },
+    { key: 'bg', label: 'c1 – Background'},
+    { key: 'chart', label: 'c2 – Highlight'},
+    { key: 'border', label: 'c3 – Border'},
+    { key: 'font', label: 'c4 – Text'},
 ];
 
-/**
- * ColorPickerCard
- * Lets the user pick four UI theme colors, shows a live preview, and saves to DB.
- * On save, the global ThemeContext is updated so the change propagates app-wide instantly.
- */
 function ColorPickerCard() {
     const { theme, setTheme } = useTheme();
     const { updateUser } = useAuth();
 
-    // Local draft — changes here affect the preview card but NOT the global theme yet
     const [draft, setDraft] = useState({ ...theme });
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
@@ -39,9 +32,7 @@ function ColorPickerCard() {
         setSaved(false);
         try {
             const data = await updateColors(colors);
-            // Apply to ThemeContext → CSS variables update globally right now
             setTheme(data.colors);
-            // Persist to AuthContext user state + localStorage
             updateUser({ colors: data.colors });
             setSaved(true);
             setTimeout(() => setSaved(false), 2500);
@@ -90,8 +81,7 @@ function ColorPickerCard() {
                         key={key}
                         className="flex items-center gap-3 p-3 rounded-lg transition-all"
                         style={{ border: '1px solid var(--border)', background: 'rgba(255,255,255,0.03)' }}
-                    >
-                        {/* Native color picker swatch */}
+                    >   
                         <label
                             htmlFor={`color-${key}`}
                             className="cursor-pointer flex-shrink-0"
@@ -145,7 +135,7 @@ function ColorPickerCard() {
                             Theme Preview
                         </p>
                         <p className="text-xs" style={{ color: draft.font, opacity: 0.55 }}>
-                            This is how your colors will look
+                            Sample Text
                         </p>
                     </div>
                 </div>

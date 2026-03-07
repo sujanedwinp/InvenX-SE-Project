@@ -1,17 +1,14 @@
 import React, { useState } from 'react';
-import { Lock, Eye, EyeOff, Loader2, Check, ShieldOff } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { Lock, Eye, EyeOff, Loader2, Check } from 'lucide-react';
 import { changePassword } from '../services/user';
 
-/**
- * PasswordCard
- * Shows a password-change form if the user logged in via username.
- * If the user logged in via dbid (DB Name), renders a disabled informational panel.
- */
-function PasswordCard() {
-    const { user } = useAuth();
-    const loginMethod = user?.loginMethod || 'dbid';
+const fields = [
+    { name: 'currentPassword', label: 'Current Password' },
+    { name: 'newPassword', label: 'New Password' },
+    { name: 'confirmPassword', label: 'Confirm New Password' },
+];
 
+function PasswordCard() {
     const [form, setForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
     const [showPw, setShowPw] = useState({ currentPassword: false, newPassword: false, confirmPassword: false });
     const [submitting, setSubmitting] = useState(false);
@@ -32,8 +29,8 @@ function PasswordCard() {
             setError('New passwords do not match.');
             return;
         }
-        if (form.newPassword.length < 6) {
-            setError('New password must be at least 6 characters.');
+        if (form.newPassword.length < 8) {
+            setError('New password must be at least 8 characters.');
             return;
         }
         setSubmitting(true);
@@ -49,43 +46,6 @@ function PasswordCard() {
             setSubmitting(false);
         }
     };
-
-    // ── Disabled state: logged in via DB Name ──────────────────────────────────
-    if (loginMethod !== 'username') {
-        return (
-            <div
-                className="rounded-xl p-6 shadow-sm"
-                style={{ background: 'var(--bg)', border: '2px solid var(--border)' }}
-            >
-                <div className="flex items-center gap-3 mb-5">
-                    <ShieldOff size={20} style={{ color: 'var(--font)', opacity: 0.4 }} />
-                    <h2 className="text-lg font-bold" style={{ color: 'var(--font)' }}>
-                        Change Password
-                    </h2>
-                </div>
-
-                <div
-                    className="rounded-lg p-5 flex flex-col items-center gap-3 text-center"
-                    style={{ border: '1.5px dashed var(--border)', opacity: 0.7 }}
-                >
-                    <Lock size={32} style={{ color: 'var(--font)', opacity: 0.3 }} />
-                    <p className="text-sm font-medium" style={{ color: 'var(--font)' }}>
-                        Password cannot be changed when logged in via DB Name.
-                    </p>
-                    <p className="text-xs" style={{ color: 'var(--font)', opacity: 0.5 }}>
-                        To change your password, log in using a username instead.
-                    </p>
-                </div>
-            </div>
-        );
-    }
-
-    // ── Active state: username login ───────────────────────────────────────────
-    const fields = [
-        { name: 'currentPassword', label: 'Current Password' },
-        { name: 'newPassword', label: 'New Password' },
-        { name: 'confirmPassword', label: 'Confirm New Password' },
-    ];
 
     return (
         <div

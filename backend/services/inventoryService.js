@@ -30,7 +30,6 @@ async function createItem({ dbid, body }) {
   if (Number.isNaN(payload.quantity) || payload.quantity < 0) throw new Error("quantity must be non-negative");
   if (Number.isNaN(payload.price) || payload.price < 0) throw new Error("price must be non-negative");
 
-  // Stack quantity if an item with the same name already exists for this user
   const existing = await InventoryItem.findOne({
     name: { $regex: new RegExp(`^${payload.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
     createdBy: dbid
@@ -71,11 +70,9 @@ async function updateFull({ dbid, id, body }) {
 
   return item ? { item: item.toObject(), alertStatus: evaluateItemAlerts(item) } : null;
 }
-
-// Module 6: atomic operators
-async function incQuantity({ dbid, id, delta }) {
-  const n = Number(delta);
-  if (!Number.isFinite(n) || n === 0) throw new Error("delta must be a non-zero number");
+async function incQuantity({ dbid, id, nqty }) {
+  const n = Number(nqty);
+  if (!Number.isFinite(n) || n === 0) throw new Error("Quantity must be a non-zero number.");
 
   const item = await InventoryItem.findOneAndUpdate(
     { _id: id, createdBy: dbid },
@@ -88,7 +85,7 @@ async function incQuantity({ dbid, id, delta }) {
 
 async function setPrice({ dbid, id, price }) {
   const n = Number(price);
-  if (!Number.isFinite(n) || n < 0) throw new Error("price must be a non-negative number");
+  if (!Number.isFinite(n) || n < 0) throw new Error("Price must be a non-negative number.");
 
   const item = await InventoryItem.findOneAndUpdate(
     { _id: id, createdBy: dbid },

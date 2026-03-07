@@ -5,15 +5,12 @@ import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recha
 import { Package, AlertTriangle, Layers } from 'lucide-react';
 import StatCard from '../components/StatCard';
 
-// Fixed colour palette — enough for top-10 slices + "Other Items"
 const COLORS = [
     '#6366f1', '#8b5cf6', '#22d3ee', '#10b981',
     '#f59e0b', '#ef4444', '#ec4899', '#3b82f6',
     '#84cc16', '#f97316', '#a78bfa'
 ];
 
-// Wrapped in memo — gives Recharts a stable reference and prevents Pie re-renders
-// triggered by parent state changes unrelated to chart data.
 const CustomTooltip = memo(({ active, payload }) => {
     if (!active || !payload?.length) return null;
     const { name, value } = payload[0].payload;
@@ -45,7 +42,6 @@ const Dashboard = () => {
         })();
     }, []);
 
-    // Memoised — only recalculated when stats reference changes, not on every render
     const chartData = useMemo(() => stats?.chartData ?? [], [stats]);
     const roleName = user?.role
         ? user.role.charAt(0).toUpperCase() + user.role.slice(1)
@@ -67,8 +63,6 @@ const Dashboard = () => {
 
     return (
         <div className="space-y-8">
-            {/* Header */}
-            {/*Updateable Later*/}
 
             {/* Stat cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -86,8 +80,6 @@ const Dashboard = () => {
 
             {/* Content grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
-                {/* ── Pie Chart ─────────────────────────────────────────────── */}
                 <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
                         Inventory Distribution
@@ -97,8 +89,6 @@ const Dashboard = () => {
                     </p>
 
                     {chartData.length > 0 ? (
-                        /* Explicit pixel height is required — percentage fails when parent
-                           height comes from a Tailwind class (Recharts limitation). */
                         <ResponsiveContainer width="100%" height={300}>
                             <PieChart>
                                 <Pie
@@ -115,8 +105,8 @@ const Dashboard = () => {
                                     endAngle={450}
                                     isAnimationActive={true}
                                     animationBegin={0}
-                                    animationDuration={200}
-                                    animationEasing="ease-out"
+                                    animationDuration={900}
+                                    animationEasing="ease-in-out"
                                 >
                                     {chartData.map((_, idx) => (
                                         <Cell
@@ -125,7 +115,7 @@ const Dashboard = () => {
                                         />
                                     ))}
                                 </Pie>
-                                <Tooltip content={<CustomTooltip />} />
+                                <Tooltip content={CustomTooltip} />
                                 <Legend
                                     verticalAlign="bottom"
                                     height={36}
@@ -142,7 +132,6 @@ const Dashboard = () => {
                     )}
                 </div>
 
-                {/* ── Profile Panel ─────────────────────────────────────────── */}
                 <div className="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <div className="flex items-center gap-4 mb-6">
                         <div>

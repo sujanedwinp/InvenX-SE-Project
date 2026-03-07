@@ -1,8 +1,8 @@
 :root {
-  --bg: #0b1220;
-  --chart: #3b82f6;
-  --border: #334155;
-  --font: #e5e7eb;
+  --bg: #0f172a;
+  --chart: #6366f1;
+  --border: #1e293b;
+  --font: #e2e8f0;
 }
 
 body {
@@ -22,7 +22,7 @@ body {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 .btn {

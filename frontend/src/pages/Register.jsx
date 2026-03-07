@@ -30,7 +30,6 @@ const Register = () => {
         try {
             const result = await registerUser(formData);
             if (result.success) {
-                // In a real app we might auto-login, but for now redirect to login
                 navigate('/login');
             } else {
                 setError(result.error);

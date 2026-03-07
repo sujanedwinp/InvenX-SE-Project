@@ -7,10 +7,7 @@ export async function loginWithDbid({ dbid, password }) {
   });
 
   setToken(data.token);
-  // Persist loginMethod alongside user so AuthContext can read it on page reload
-  const userToStore = { ...data.user, loginMethod: data.user?.loginMethod || "dbid" };
-  localStorage.setItem("invenx_user", JSON.stringify(userToStore));
-
+  localStorage.setItem("invenx_user", JSON.stringify(data.user));
   return data;
 }
 
@@ -30,4 +27,3 @@ export async function fetchMe() {
   const data = await apiFetch("/api/auth/me", { token });
   return data.user;
 }
-

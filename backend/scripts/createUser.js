@@ -5,15 +5,14 @@ const { connectDB } = require("../config/db");
 const User = require("../models/User");
 
 function usage() {
-  // eslint-disable-next-line no-console
   console.log(
     [
       "Usage:",
       "  node scripts/createUser.js --name \"Jane\" --password \"Secret123\" [--role admin|staff|user]",
       "",
       "Notes:",
-      "- DBID is auto-generated in the User model if not provided.",
-      "- This script is INTERNAL ONLY (no email login/reset flows)."
+      "- DBID is auto-generated, if not provided.",
+      "- Internal script only."
     ].join("\n")
   );
 }
@@ -42,7 +41,6 @@ async function main() {
     name,
     passwordHash,
     role,
-    // Provide sensible defaults; users can customize in Module 4.
     colors: {
       bg: "#0b1220",
       chart: "#3b82f6",
@@ -52,16 +50,13 @@ async function main() {
     isActive: true
   });
 
-  // eslint-disable-next-line no-console
   console.log("User created:");
-  // eslint-disable-next-line no-console
   console.log({ name: user.name, dbid: user.dbid, role: user.role });
 
   process.exit(0);
 }
 
 main().catch((err) => {
-  // eslint-disable-next-line no-console
   console.error(err);
   process.exit(1);
 });

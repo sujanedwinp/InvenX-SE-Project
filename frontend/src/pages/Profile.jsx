@@ -4,22 +4,8 @@ import { useAuth } from '../context/AuthContext';
 import ColorPickerCard from '../components/ColorPickerCard';
 import PasswordCard from '../components/PasswordCard';
 
-/**
- * Profile Page
- * Layout:
- *   ┌─────────────────────┬─────────────────────┐
- *   │  Left Panel         │  Color Picker Card  │
- *   │  (User Info)        ├─────────────────────┤
- *   │                     │  Password Card      │
- *   └─────────────────────┴─────────────────────┘
- *
- * All panels use CSS variables (--bg, --border, --font, --chart)
- * so they automatically reflect the active theme.
- */
 function Profile() {
     const { user } = useAuth();
-
-    // Format the ISO createdAt date nicely
     const createdAt = user?.createdAt
         ? new Date(user.createdAt).toLocaleDateString('en-US', {
             year: 'numeric', month: 'long', day: 'numeric'
@@ -35,7 +21,6 @@ function Profile() {
 
     return (
         <div className="space-y-6 animate-fade-in">
-            {/* Page title */}
             <div>
                 <h1
                     className="text-2xl font-bold"
@@ -51,15 +36,11 @@ function Profile() {
                 </p>
             </div>
 
-            {/* Main grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
-
-                {/* ── Left Panel – User Info ─────────────────────────────────── */}
                 <div
                     className="rounded-xl p-8 shadow-sm h-full flex flex-col gap-6"
                     style={{ background: 'var(--bg)', border: '2px solid var(--border)' }}
                 >
-                    {/* Avatar + name headline */}
                     <div className="flex flex-col items-center gap-4 pb-6" style={{ borderBottom: '1px solid var(--border)' }}>
                         <div
                             className="w-20 h-20 rounded-full flex items-center justify-center shadow-lg"
@@ -80,7 +61,6 @@ function Profile() {
                         </div>
                     </div>
 
-                    {/* Detail rows */}
                     <div className="space-y-4 flex-1">
                         {infoRows.map(({ icon, label, value }) => (
                             <div
@@ -103,7 +83,6 @@ function Profile() {
                         ))}
                     </div>
 
-                    {/* Active status badge */}
                     <div
                         className="flex items-center gap-2 justify-center py-2 rounded-lg"
                         style={{ background: 'rgba(34,197,94,0.10)', border: '1px solid rgba(34,197,94,0.2)' }}
@@ -113,7 +92,6 @@ function Profile() {
                     </div>
                 </div>
 
-                {/* ── Right Column ───────────────────────────────────────────── */}
                 <div className="flex flex-col gap-6">
                     <ColorPickerCard />
                     <PasswordCard />

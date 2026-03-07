@@ -8,7 +8,7 @@ const AddInventory = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [loading, setLoading] = useState(false);
-    const [itemId, setItemId] = useState(null); // set when editing
+    const [itemId, setItemId] = useState(null);
     const [formData, setFormData] = useState({
         name: '',
         quantity: '',
@@ -17,7 +17,6 @@ const AddInventory = () => {
         maxPrice: 0
     });
 
-    // If navigated here from the Edit button, prefill the form
     useEffect(() => {
         if (location.state) {
             const { id, name, quantity, price, minQty, maxPrice } = location.state;
@@ -52,10 +51,8 @@ const AddInventory = () => {
             };
 
             if (itemId) {
-                // Edit mode — PUT
                 await updateInventoryItem(itemId, payload);
             } else {
-                // Create mode — POST (will stack if same name exists)
                 await createInventoryItem(payload);
             }
 

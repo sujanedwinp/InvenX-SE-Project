@@ -11,20 +11,14 @@ const AuthContext = createContext({
   isLoading: true
 });
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
-
-/** Write user to localStorage and return the same object. */
 function persistUser(userObj) {
   localStorage.setItem("invenx_user", JSON.stringify(userObj));
   return userObj;
 }
 
-/** Return true only when a colors object has all four hex fields. */
 function isValidColors(c) {
   return c && c.bg && c.chart && c.border && c.font;
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
 
 export function AuthProvider({ children }) {
   const { setTheme } = useTheme();
@@ -33,33 +27,23 @@ export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("invenx_token"));
   const [isLoading, setIsLoading] = useState(true);
 
-  /**
-   * updateUser(patch)
-   * Atomically merges patch into user state AND localStorage.
-   */
+ 
   const updateUser = useCallback((patch) => {
     setUser(prev => persistUser({ ...prev, ...patch }));
   }, []);
 
-  /**
-   * boot()
-   * Runs once on mount (and when token changes).
-   * Fetches fresh user data from /api/auth/me and applies theme.
-   * If the API call fails (expired token etc.), we still resolve isLoading
-   * so ProtectedRoute can make the correct decision.
-   */
+  
   useEffect(() => {
     let cancelled = false;
 
     async function boot() {
-      // No token — mark loading done immediately, no API call needed.
       if (!token) {
         if (!cancelled) setIsLoading(false);
         return;
       }
 
       try {
-        const me = await fetchMe();   // GET /api/auth/me
+        const me = await fetchMe(); 
         if (cancelled) return;
         if (!me) return;
 
@@ -77,7 +61,6 @@ export function AuthProvider({ children }) {
         if (isValidColors(themeToApply)) setTheme(themeToApply);
 
       } catch (err) {
-        // /api/auth/me failed (token expired / invalid) — clear stale auth
         console.warn("Session check failed:", err.message);
         if (!cancelled) {
           logout();
@@ -91,7 +74,7 @@ export function AuthProvider({ children }) {
 
     boot();
     return () => { cancelled = true; };
-  }, [setTheme, token]);
+  }, [token]);
 
   async function login({ dbid, password }) {
     const data = await loginWithDbid({ dbid, password });

@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { Menu, X, Database, LogOut, Package, LayoutDashboard, Home as HomeIcon, UserCircle } from 'lucide-react';
+import { Menu, X, LogOut, Package, LayoutDashboard, UserCircle } from 'lucide-react';
 import { logout } from '../services/auth';
+import { useAuth } from '../context/AuthContext';
 
 const Navbar = () => {
     const navigate = useNavigate();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-    // Read from the correct key that AuthContext writes to
-    const storedUser = JSON.parse(localStorage.getItem('invenx_user') || '{}');
-    const dbName = (storedUser.dbid || storedUser.dbId || 'DATABASE').toUpperCase();
+    const { user } = useAuth();
+    const dbName = (user?.dbid || 'DATABASE').toUpperCase();
 
     const handleLogout = () => {
-        logout(); // clears invenx_token + invenx_user
+        logout();
         navigate('/login');
     };
 
@@ -26,18 +25,17 @@ const Navbar = () => {
         <nav className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex justify-between h-16">
-                    {/* Logo and Desktop Nav */}
                     <div className="flex items-center">
                         <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-                            <div className="bg-indigo-600 p-1.5 rounded-lg">
-                                <Database className="h-6 w-6 text-white" />
+                            <div className="bg-indigo-600 p-0.5 rounded-lg">
+                                <img src="/logo-no-bg.png" alt="Logo Image" className="h-10 w-10 object-contain" />
                             </div>
                             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400">
                                 InvenX
                             </span>
                         </div>
 
-                        {/* Desktop Links */}
+                        {/* Dashboard Links */}
                         <div className="hidden md:flex md:ml-8 md:space-x-4">
                             {navLinks.map((link) => (
                                 <NavLink
@@ -57,7 +55,6 @@ const Navbar = () => {
                         </div>
                     </div>
 
-                    {/* Right Side: DB Info & User */}
                     <div className="hidden md:flex items-center gap-4">
                         <div className="hidden lg:flex flex-col items-end mr-4">
                             <span className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wider font-semibold">Database</span>
