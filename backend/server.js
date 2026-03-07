@@ -46,11 +46,11 @@ app.options("*", cors());
 app.use(express.json());
 
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 50,                   // 50 attempts per real client IP per window
+  windowMs: 15 * 60 * 1000,
+  max: 50,
   message: { message: "Too many requests. Please try again later." },
-  standardHeaders: true,     // Return rate limit info in RateLimit-* headers
-  legacyHeaders: false       // Disable X-RateLimit-* headers
+  standardHeaders: true,
+  legacyHeaders: false
 });
 
 app.get("/health", (_req, res) => {
