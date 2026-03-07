@@ -20,6 +20,11 @@ const dashboardRoutes = require("./routes/dashboardRoutes");
 
 const app = express();
 
+// Required for Render, Railway, Heroku and any reverse-proxy deployment.
+// Allows express-rate-limit to read the real client IP from X-Forwarded-For
+// instead of the proxy IP — which would cause ALL users to share one bucket.
+app.set("trust proxy", 1);
+
 const allowedOrigins = (process.env.ALLOWED_ORIGINS || "https://invenx-se.vercel.app")
   .split(",")
   .map((o) => o.trim())
@@ -41,11 +46,11 @@ app.options("*", cors());
 app.use(express.json());
 
 const authLimiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 20,
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 50,                   // 50 attempts per real client IP per window
   message: { message: "Too many requests. Please try again later." },
-  standardHeaders: true,
-  legacyHeaders: false
+  standardHeaders: true,     // Return rate limit info in RateLimit-* headers
+  legacyHeaders: false       // Disable X-RateLimit-* headers
 });
 
 app.get("/health", (_req, res) => {
