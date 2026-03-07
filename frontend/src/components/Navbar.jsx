@@ -27,9 +27,6 @@ const Navbar = () => {
                 <div className="flex justify-between h-16">
                     <div className="flex items-center">
                         <div className="flex-shrink-0 flex items-center gap-2 cursor-pointer" onClick={() => navigate('/')}>
-                            <div className="bg-indigo-600 p-0.5 rounded-lg">
-                                <img src="/logo-no-bg.png" alt="Logo Image" className="h-10 w-10 object-contain" />
-                            </div>
                             <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-violet-600 dark:from-indigo-400 dark:to-violet-400">
                                 InvenX
                             </span>
