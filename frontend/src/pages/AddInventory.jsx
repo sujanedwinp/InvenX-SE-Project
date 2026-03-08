@@ -110,7 +110,7 @@ const AddInventory = () => {
                                 min="0"
                                 value={formData.quantity}
                                 onChange={handleChange}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm py-2 px-3 border"
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm py-2 px-3 border appearance-none text-gray-900 dark:text-white"
                             />
                         </div>
 
@@ -124,7 +124,7 @@ const AddInventory = () => {
                                 step="0.01"
                                 value={formData.price}
                                 onChange={handleChange}
-                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm py-2 px-3 border"
+                                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm py-2 px-3 border appearance-none text-gray-900 dark:text-white"
                             />
                         </div>
 
@@ -162,7 +162,7 @@ const AddInventory = () => {
                                             step="0.01"
                                             value={formData.maxPrice}
                                             onChange={handleChange}
-                                            className="block w-full pl-10 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm py-2 px-3 border"
+                                            className="block w-full pl-10 pr-3 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white sm:text-sm py-2 border appearance-none text-gray-900 dark:text-white"
                                         />
                                     </div>
                                     <p className="mt-1 text-xs text-gray-500">Alert when price exceeds this.</p>

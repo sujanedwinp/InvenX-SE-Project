@@ -17,7 +17,7 @@ const Home = () => {
                     />
                 </div>
 
-                <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 sm:py-16 pt-2">
+                <div className="mx-auto max-w-7xl px-6 lg:px-8 py-12 sm:py-16">
                     <div className="mx-auto max-w-2xl text-center">
                         <div className="mb-4 flex justify-center">
                             <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20 dark:text-gray-300 dark:ring-white/10 dark:hover:ring-white/20">
