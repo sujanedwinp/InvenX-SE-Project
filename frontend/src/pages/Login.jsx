@@ -54,7 +54,7 @@ const Login = () => {
 
                 <div>
                     <label htmlFor="dbId" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-200">
-                        DB Name
+                        DB ID
                     </label>
                     <div className="mt-2">
                         <input

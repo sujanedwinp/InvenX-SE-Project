@@ -1,9 +1,10 @@
 import React, { useEffect, useState, useMemo, memo } from 'react';
 import { fetchDashboardStats } from '../services/inventory';
 import { useAuth } from '../context/AuthContext';
-import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { Package, AlertTriangle, Layers } from 'lucide-react';
 import StatCard from '../components/StatCard';
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip, Legend } from 'recharts';
+
 
 const COLORS = [
     '#6366f1', '#8b5cf6', '#22d3ee', '#10b981',
@@ -98,8 +99,8 @@ const Dashboard = () => {
                                     cx="50%"
                                     cy="50%"
                                     outerRadius={110}
-                                    innerRadius={50}
-                                    paddingAngle={2}
+                                    innerRadius={60}
+                                    paddingAngle={5}
                                     stroke="none"
                                     startAngle={90}
                                     endAngle={450}
@@ -107,6 +108,7 @@ const Dashboard = () => {
                                     animationBegin={0}
                                     animationDuration={900}
                                     animationEasing="ease-in-out"
+                                    cornerRadius={5}
                                 >
                                     {chartData.map((_, idx) => (
                                         <Cell

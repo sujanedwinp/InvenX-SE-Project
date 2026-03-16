@@ -1,5 +1,6 @@
 const InventoryItem = require("../models/InventoryItem");
 const { evaluateItemAlerts } = require("./alertEngine");
+const { validateItemFields } = require("../utils/validators");
 
 function toItemPayload(body) {
   return {
@@ -26,9 +27,16 @@ async function getItem({ dbid, id }) {
 
 async function createItem({ dbid, body }) {
   const payload = toItemPayload(body || {});
-  if (!payload.name) throw new Error("name is required");
-  if (Number.isNaN(payload.quantity) || payload.quantity < 0) throw new Error("quantity must be non-negative");
-  if (Number.isNaN(payload.price) || payload.price < 0) throw new Error("price must be non-negative");
+
+  // Full server-side validation — mirrors frontend rules
+  const v = validateItemFields({
+    name:     payload.name,
+    quantity: payload.quantity,
+    price:    payload.price,
+    minQty:   payload.alerts?.minQty,
+    maxPrice: payload.alerts?.maxPrice
+  });
+  if (!v.valid) throw new Error(v.message);
 
   const existing = await InventoryItem.findOne({
     name: { $regex: new RegExp(`^${payload.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`, "i") },
@@ -53,16 +61,25 @@ async function createItem({ dbid, body }) {
 
 async function updateFull({ dbid, id, body }) {
   const payload = toItemPayload(body || {});
-  if (!payload.name) throw new Error("name is required");
+
+  // Full server-side validation — mirrors frontend rules
+  const v = validateItemFields({
+    name:     payload.name,
+    quantity: payload.quantity,
+    price:    payload.price,
+    minQty:   payload.alerts?.minQty,
+    maxPrice: payload.alerts?.maxPrice
+  });
+  if (!v.valid) throw new Error(v.message);
 
   const item = await InventoryItem.findOneAndUpdate(
     { _id: id, createdBy: dbid },
     {
       $set: {
-        name: payload.name,
+        name:     payload.name,
         quantity: payload.quantity,
-        price: payload.price,
-        alerts: payload.alerts
+        price:    payload.price,
+        alerts:   payload.alerts
       }
     },
     { new: true, runValidators: true }

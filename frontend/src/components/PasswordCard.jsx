@@ -1,19 +1,63 @@
 import React, { useState } from 'react';
-import { Lock, Eye, EyeOff, Loader2, Check } from 'lucide-react';
+import { Lock, Eye, EyeOff, Loader2, Check, CheckCircle2, Circle } from 'lucide-react';
 import { changePassword } from '../services/user';
+import { PASSWORD_RULES, checkPassword } from '../utils/validation';
 
-const fields = [
-    { name: 'currentPassword', label: 'Current Password' },
-    { name: 'newPassword', label: 'New Password' },
-    { name: 'confirmPassword', label: 'Confirm New Password' },
+// ─── Password Strength Indicator (reused from Register) ──────────────────────
+
+function PasswordStrengthIndicator({ password }) {
+    const { passed } = checkPassword(password || '');
+    const hasTyped   = password.length > 0;
+
+    return (
+        <div className="mt-2 p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.04)', border: '1.5px solid var(--border)' }}>
+            <p className="text-xs font-semibold mb-2" style={{ color: 'var(--font)', opacity: 0.55 }}>
+                Password must contain:
+            </p>
+            <ul className="space-y-1">
+                {PASSWORD_RULES.map(({ key, label }) => {
+                    const done = passed.has(key);
+                    return (
+                        <li
+                            key={key}
+                            className="flex items-center gap-2 text-xs transition-colors duration-200"
+                            style={{
+                                color: done
+                                    ? '#22c55e'
+                                    : hasTyped
+                                    ? '#ef4444'
+                                    : 'var(--font)',
+                                opacity: done ? 1 : hasTyped ? 0.9 : 0.4
+                            }}
+                        >
+                            {done
+                                ? <CheckCircle2 size={13} className="flex-shrink-0" />
+                                : <Circle      size={13} className="flex-shrink-0" />}
+                            {label}
+                        </li>
+                    );
+                })}
+            </ul>
+        </div>
+    );
+}
+
+// ─── Password Card ────────────────────────────────────────────────────────────
+
+const plainFields = [
+    { name: 'currentPassword', label: 'Current Password', showIndicator: false },
+    { name: 'newPassword',     label: 'New Password',     showIndicator: true  },
+    { name: 'confirmPassword', label: 'Confirm New Password', showIndicator: false },
 ];
 
 function PasswordCard() {
-    const [form, setForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
-    const [showPw, setShowPw] = useState({ currentPassword: false, newPassword: false, confirmPassword: false });
+    const [form, setForm]         = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
+    const [showPw, setShowPw]     = useState({ currentPassword: false, newPassword: false, confirmPassword: false });
     const [submitting, setSubmitting] = useState(false);
-    const [success, setSuccess] = useState(false);
-    const [error, setError] = useState('');
+    const [success, setSuccess]   = useState(false);
+    const [error, setError]       = useState('');
+
+    const pwCheck = checkPassword(form.newPassword);
 
     const handleChange = e => {
         setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,14 +69,21 @@ function PasswordCard() {
 
     const handleSubmit = async e => {
         e.preventDefault();
+
+        // ── Client-side validation ─────────────────────────────────────────
+        if (!form.currentPassword) {
+            setError('Current password is required.');
+            return;
+        }
+        if (!pwCheck.valid) {
+            setError(`New password is missing: ${pwCheck.failed.join(', ')}.`);
+            return;
+        }
         if (form.newPassword !== form.confirmPassword) {
             setError('New passwords do not match.');
             return;
         }
-        if (form.newPassword.length < 8) {
-            setError('New password must be at least 8 characters.');
-            return;
-        }
+
         setSubmitting(true);
         setError('');
         try {
@@ -59,8 +110,8 @@ function PasswordCard() {
                 </h2>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-                {fields.map(({ name, label }) => (
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+                {plainFields.map(({ name, label, showIndicator }) => (
                     <div key={name}>
                         <label
                             htmlFor={`pw-${name}`}
@@ -95,6 +146,8 @@ function PasswordCard() {
                                 {showPw[name] ? <EyeOff size={16} /> : <Eye size={16} />}
                             </button>
                         </div>
+                        {/* Show strength indicator only for the new password field */}
+                        {showIndicator && <PasswordStrengthIndicator password={form.newPassword} />}
                     </div>
                 ))}
 
@@ -111,7 +164,7 @@ function PasswordCard() {
 
                 <button
                     type="submit"
-                    disabled={submitting}
+                    disabled={submitting || !pwCheck.valid}
                     className="w-full flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-semibold transition-all disabled:opacity-60 disabled:cursor-not-allowed mt-2"
                     style={{ background: 'var(--chart)', color: '#ffffff' }}
                 >

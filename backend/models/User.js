@@ -3,9 +3,17 @@ const { generateDbid } = require("../utils/dbid");
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, trim: true },
+    name: { type: String, required: true, trim: true, maxlength: 16 },
 
-    dbid: { type: String, required: true, unique: true, index: true },
+    dbid: {
+      type: String,
+      required: true,
+      unique: true,
+      index: true,
+      minlength: 9,
+      maxlength: 15,
+      match: [/^[a-zA-Z0-9]+$/, 'Database ID may only contain letters and numbers.']
+    },
 
     passwordHash: { type: String, required: true, select: false },
 

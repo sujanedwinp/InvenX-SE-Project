@@ -2,6 +2,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
+const { validateRegistration } = require("../utils/validators");
 
 // Dummy hash used for constant-time comparison when user is not found
 // Prevents timing-based user enumeration attacks
@@ -55,12 +56,10 @@ async function login(req, res) {
 async function register(req, res) {
   const { name, dbid, password } = req.body || {};
 
-  if (!name || !password) {
-    return res.status(400).json({ message: "Name and password are required." });
-  }
 
-  if (password.length < 8) {
-    return res.status(400).json({ message: "Password must be at least 8 characters." });
+  const validation = validateRegistration({ name, dbid, password });
+  if (!validation.valid) {
+    return res.status(400).json({ message: validation.message });
   }
 
   try {

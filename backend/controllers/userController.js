@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const { validatePassword } = require("../utils/validators");
 
 function isValidHex(color) {
     return typeof color === "string" && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(color);
@@ -56,8 +57,10 @@ async function changePassword(req, res) {
         return res.status(400).json({ message: "currentPassword and newPassword are required" });
     }
 
-    if (newPassword.length < 8) {
-        return res.status(400).json({ message: "New password must be at least 8 characters" });
+
+    const pwValidation = validatePassword(newPassword);
+    if (!pwValidation.valid) {
+        return res.status(400).json({ message: pwValidation.message });
     }
 
     try {
