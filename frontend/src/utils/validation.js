@@ -27,9 +27,11 @@ export function checkPassword(pw) {
 
 
 export const NAME_MAX_LENGTH = 16;
+export const ITEM_NAME_REGEX = /^[A-Za-z ]{1,16}$/;
 
 /**
  * Validates a user / item name.
+ * Must contain only letters and spaces, max 16 characters.
  * @param {string} name
  * @returns {{ valid: boolean, message: string }}
  */
@@ -38,6 +40,8 @@ export function validateName(name) {
     if (!trimmed) return { valid: false, message: 'Name is required.' };
     if (trimmed.length > NAME_MAX_LENGTH)
         return { valid: false, message: `Name must be at most ${NAME_MAX_LENGTH} characters.` };
+    if (!ITEM_NAME_REGEX.test(trimmed))
+        return { valid: false, message: 'Name may only contain letters and spaces.' };
     return { valid: true, message: '' };
 }
 
@@ -54,7 +58,7 @@ export function validateDbid(dbid) {
     const val = (dbid || '').trim();
     if (!val) return { valid: false, message: 'Database ID is required.' };
     if (val.length < DBID_MIN || val.length > DBID_MAX)
-        return { valid: false, message: `Database ID must be ${DBID_MIN}–${DBID_MAX} ALPHANUMERIC characters only.` };
+        return { valid: false, message: `Database ID must be ${DBID_MIN}–${DBID_MAX} alphanumeric characters only.` };
     if (!DBID_REGEX.test(val))
         return { valid: false, message: 'Database ID may only contain letters and numbers.' };
     return { valid: true, message: '' };

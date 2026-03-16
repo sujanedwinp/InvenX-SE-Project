@@ -64,6 +64,7 @@ function validateRegistration({ name, dbid, password }) {
 }
 
 const ITEM_NAME_MAX = 16;
+const ITEM_NAME_REGEX = /^[A-Za-z ]{1,16}$/;
 const NUMERIC_MIN = 1;
 const NUMERIC_MAX = 999_999_999;
 
@@ -155,6 +156,9 @@ function validateItemFields({ name, quantity, price, minQty, maxPrice }) {
     }
     if (trimmedName.length > ITEM_NAME_MAX) {
         return { valid: false, message: `Item name must be at most ${ITEM_NAME_MAX} characters.` };
+    }
+    if (!ITEM_NAME_REGEX.test(trimmedName)) {
+        return { valid: false, message: 'Item name may only contain letters and spaces.' };
     }
 
     const qtyResult = validateInteger(quantity, 'Quantity');

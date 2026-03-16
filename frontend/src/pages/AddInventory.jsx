@@ -9,6 +9,7 @@ import {
     validatePositiveNumber,
     validateAlertThreshold,
     NAME_MAX_LENGTH,
+    ITEM_NAME_REGEX,
     NUMERIC_MAX
 } from '../utils/validation';
 
@@ -43,15 +44,19 @@ const AddInventory = () => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name === 'name' && value.length > NAME_MAX_LENGTH) return;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        if (name === 'name') {
+            const sanitized = value.replace(/[^A-Za-z ]/g, '');
+            if (sanitized.length > NAME_MAX_LENGTH) return;
+            setFormData(prev => ({ ...prev, [name]: sanitized }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
         setFormError('');
         if (fieldErrors[name]) {
             setFieldErrors(prev => ({ ...prev, [name]: '' }));
         }
     };
 
-    // ── Client-side validation ────────────────────────────────────────────────
     const validate = () => {
         const errors = {};
 

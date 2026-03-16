@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const inventoryItemSchema = new mongoose.Schema(
   {
-    name:     { type: String, required: true, trim: true, maxlength: 16 },
+    name:     { type: String, required: true, trim: true, maxlength: 16, match: [/^[A-Za-z ]{1,16}$/, 'Item name may only contain letters and spaces.'] },
     quantity: { type: Number, required: true, min: 1, max: 999999999 },
     price:    { type: Number, required: true, min: 1, max: 999999999 },
 
