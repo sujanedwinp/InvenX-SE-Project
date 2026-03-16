@@ -109,6 +109,7 @@ const Dashboard = () => {
                                     animationDuration={900}
                                     animationEasing="ease-in-out"
                                     cornerRadius={5}
+                                    minAngle={5}
                                 >
                                     {chartData.map((_, idx) => (
                                         <Cell
@@ -124,6 +125,8 @@ const Dashboard = () => {
                                     formatter={(value) => (
                                         <span className="text-xs text-gray-500 dark:text-gray-400">{value}</span>
                                     )}
+                                    iconType='circle'
+                                    iconSize={16}
                                 />
                             </PieChart>
                         </ResponsiveContainer>
