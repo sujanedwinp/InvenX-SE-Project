@@ -22,18 +22,15 @@ async function updateColors(req, res) {
     }
 
     try {
-        const user = await User.findOne({ dbid: req.user.dbid, isActive: true });
+        const user = await User.findOneAndUpdate(
+            { dbid: req.user.dbid, isActive: true },
+            { $set: { "colors.bg": bg, "colors.chart": chart, "colors.border": border, "colors.font": font } },
+            { new: true, runValidators: false }
+        );
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-
-        user.colors.bg = bg;
-        user.colors.chart = chart;
-        user.colors.border = border;
-        user.colors.font = font;
-
-        await user.save();
 
         const savedColors = {
             bg: user.colors.bg,

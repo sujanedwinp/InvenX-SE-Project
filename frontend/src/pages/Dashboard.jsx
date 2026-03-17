@@ -65,7 +65,6 @@ const Dashboard = () => {
     return (
         <div className="space-y-8">
 
-            {/* Stat cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <StatCard title="Total Items" value={stats?.totalItems ?? 0} icon={Package} color="indigo" />
                 <StatCard title="Total Stock" value={stats?.totalStock ?? 0} icon={Layers} color="blue" />
@@ -79,7 +78,6 @@ const Dashboard = () => {
                 />
             </div>
 
-            {/* Content grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 <div className="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
                     <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-1">
@@ -120,7 +118,6 @@ const Dashboard = () => {
                                 </Pie>
                                 <Tooltip content={CustomTooltip} />
                                 <Legend
-                                    verticalAlign="bottom"
                                     height={36}
                                     formatter={(value) => (
                                         <span className="text-xs text-gray-500 dark:text-gray-400">{value}</span>
