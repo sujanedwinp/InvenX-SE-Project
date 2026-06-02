@@ -25,7 +25,7 @@ InvenX is an Internal Inventory Management System designed to streamline invento
 ### 1. Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/sujanedwinp/InvenX-SE-Project
 cd InvenX
 ```
 
